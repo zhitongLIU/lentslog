@@ -1,13 +1,17 @@
 // Package ge slack
 
-package models
+package slack
 
 import (
+	"errors"
+	"fmt"
+	slackSDK "github.com/nlopes/slack"
 	"net/http"
+	"os"
 	"time"
 )
 
-type SlackRequest struct {
+type Request struct {
 	id          int64
 	TeamId      string
 	TeamDomain  string
@@ -21,7 +25,7 @@ type SlackRequest struct {
 	Time        string
 }
 
-func NewSlackRequest(r *http.Request) (*SlackRequest, error) {
+func NewRequest(r *http.Request) (*Request, error) {
 	r.ParseForm()
 	err := r.ParseForm()
 
@@ -43,7 +47,7 @@ func NewSlackRequest(r *http.Request) (*SlackRequest, error) {
 	timestamp := r.Header.Get("X-Slack-Request-Timestamp")
 	requestTime, _ := time.Parse(time.UnixDate, timestamp)
 
-	return &SlackRequest{
+	return &Request{
 		Text:        text,
 		Token:       token,
 		TeamId:      teamId,
@@ -55,4 +59,31 @@ func NewSlackRequest(r *http.Request) (*SlackRequest, error) {
 		TriggerId:   triggerId,
 		Time:        requestTime.String(),
 	}, nil
+}
+
+func FindDirectMessageDestinationUser(r *Request) (*slackSDK.User, error) {
+	api := slackSDK.New(os.Getenv("SLACK_API_TOKEN"))
+	imChannels, err := api.GetIMChannels()
+	if err != nil {
+		return nil, err
+	}
+
+	var userId string
+	for _, imChannel := range imChannels {
+		if imChannel.ID == r.ChannelId {
+			userId = imChannel.User
+		}
+	}
+
+	fmt.Println(userId)
+	if userId == "" {
+		return nil, errors.New("user id not found")
+	}
+
+	user, err := api.GetUserInfo(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }

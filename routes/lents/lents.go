@@ -2,13 +2,14 @@ package lents
 
 import (
 	"fmt"
-	"github.com/zhitongLIU/lentslog/models"
+	"github.com/zhitongLIU/lentslog/slack"
 	"net/http"
+	"net/http/httputil"
 )
 
 func LentsPostHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	request, err := models.NewSlackRequest(r)
+	request, err := slack.NewRequest(r)
 
 	if err != nil {
 		fmt.Fprintf(w, err.Error())
@@ -25,4 +26,19 @@ func LentsPostHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("%s = %s\n", "ChannelName", request.ChannelName)
 	fmt.Printf("%s = %s\n", "Time", request.Time)
 	fmt.Printf("%s = %s\n", "UserName", request.UserName)
+
+	dump, err := httputil.DumpRequest(r, true)
+	fmt.Fprintf(w, string(dump))
+
+	for k, v := range r.Form {
+		fmt.Fprintf(w, "%s = %s\n", k, v)
+	}
+
+	u, err := slack.FindDirectMessageDestinationUser(request)
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
+		return
+	}
+
+	fmt.Fprintf(w, u.Name)
 }

@@ -7,6 +7,30 @@
 			"path": "github.com/gorilla/mux",
 			"revision": "3d80bc801bb034e17cae38591335b3b1110f1c47",
 			"revisionTime": "2018-10-30T15:25:28Z"
+		},
+		{
+			"checksumSHA1": "lnXCQ0W+TUrintwU69ljmXf5o+k=",
+			"path": "github.com/gorilla/websocket",
+			"revision": "483fb8d7c32fcb4b5636cd293a92e3935932e2f4",
+			"revisionTime": "2018-10-30T14:45:53Z"
+		},
+		{
+			"checksumSHA1": "xizfo7jSATdBxVvr7XrpcnVxYf0=",
+			"path": "github.com/nlopes/slack",
+			"revision": "cd759032689754457520f81827abec1a4759d093",
+			"revisionTime": "2018-11-05T15:48:27Z"
+		},
+		{
+			"checksumSHA1": "qyYGIzIDhpvtt4ut9Ifnimtuc30=",
+			"path": "github.com/nlopes/slack/slackutilsx",
+			"revision": "cd759032689754457520f81827abec1a4759d093",
+			"revisionTime": "2018-11-05T15:48:27Z"
+		},
+		{
+			"checksumSHA1": "DTy0iJ2w5C+FDsN9EnzfhNmvS+o=",
+			"path": "github.com/pkg/errors",
+			"revision": "059132a15dd08d6704c67711dae0cf35ab991756",
+			"revisionTime": "2018-10-23T23:59:46Z"
 		}
 	],
 	"rootPath": "github.com/zhitongLIU/lentslog"
