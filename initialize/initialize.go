@@ -1,9 +1,9 @@
 package initialize
 
 import (
-	"github.com/zhitongLIU/lentslog/models"
+	"github.com/zhitongLIU/lentslog/transaction"
 )
 
 func Execute() {
-	models.InitTransactionContentTable()
+	transaction.InitTransactionContentTable()
 }

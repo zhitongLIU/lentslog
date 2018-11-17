@@ -1,6 +1,6 @@
 // Package ge slack
 
-package models
+package transaction
 
 import (
 	"fmt"
