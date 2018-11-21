@@ -5,5 +5,5 @@ import (
 )
 
 func Execute() {
-	transaction.InitTransactionContentTable()
+	transaction.InitTables()
 }
