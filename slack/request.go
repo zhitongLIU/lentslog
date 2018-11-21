@@ -62,6 +62,35 @@ func NewRequest(r *http.Request) (*Request, error) {
 }
 
 func FindDirectMessageDestinationUser(r *Request) (*slackSDK.User, error) {
+	env := os.Getenv("ENV")
+	if env == "test" {
+		user := &slackSDK.User{
+			ID:                "testid",
+			TeamID:            "testTeamID",
+			Name:              "testName",
+			Deleted:           false,
+			Color:             "#FFFFF",
+			RealName:          "testRealName",
+			TZ:                "testTZ",
+			TZLabel:           "testTZLabel",
+			TZOffset:          0,
+			IsBot:             false,
+			IsAdmin:           true,
+			IsOwner:           false,
+			IsPrimaryOwner:    false,
+			IsRestricted:      false,
+			IsUltraRestricted: false,
+			IsStranger:        false,
+			IsAppUser:         false,
+			Has2FA:            false,
+			HasFiles:          false,
+			Presence:          "Presence",
+			Locale:            "Local",
+			// Profile           UserProfile,
+		}
+
+		return user, nil
+	}
 	api := slackSDK.New(os.Getenv("SLACK_API_TOKEN"))
 	imChannels, err := api.GetIMChannels()
 	if err != nil {

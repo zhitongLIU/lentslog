@@ -1,11 +1,13 @@
-package lents
+package borrow
 
 import (
+	"errors"
 	"fmt"
 	"github.com/zhitongLIU/lentslog/slack"
 	"github.com/zhitongLIU/lentslog/transaction"
 	"net/http"
 	"net/http/httputil"
+	"strconv"
 )
 
 func PostHandler(w http.ResponseWriter, r *http.Request) {
@@ -40,12 +42,30 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, err.Error())
 		return
 	}
+	fmt.Fprintf(w, u.Name)
 
-	transactions := transaction.All()
-	fmt.Printf("%s", transactions)
-	for t := range transactions {
-		fmt.Printf("%s", t)
+	text := request.Text
+	sum, _ := strconv.ParseFloat(text, 64)
+
+	err = valid_borrow(sum)
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
+		return
 	}
 
-	fmt.Fprintf(w, u.Name)
+	fmt.Printf("%T, %v\n", sum, sum)
+	transaction, err := transaction.New(sum, string(request.UserId), string(u.ID))
+	fmt.Println("transaction %s", transaction)
+}
+
+func valid_borrow(sum float64) error {
+	err_msg := ""
+	if sum <= 0 {
+		err_msg += "borrow should be positive! "
+	}
+
+	if err_msg != "" {
+		return errors.New(err_msg)
+	}
+	return nil
 }
